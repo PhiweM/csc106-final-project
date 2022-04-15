@@ -1,0 +1,156 @@
+var currentScene= 0; 
+
+var drawBitMoji = function(bitX,bitY,h){   
+    fill(225, 172, 150); 
+    ellipse (bitX-(h/150*30),bitY-(h/150*20),h/150*100,h/150*100); //face
+    fill(0, 0, 0);
+    arc(bitX-(h/150*30),bitY-(h/150*50),h/150*90,h/150*75,180,360);//hat
+    fill(0,0,0);
+    rect(bitX-(h/150*10),bitY-(h/150*61),h/150*60,h/150*10);//hat
+    fill (31, 111, 191);
+    ellipse (bitX-(h/150*10),bitY-(h/150*35),h/150*10,h/150*10); //Eye
+    fill (31, 111, 191);
+    ellipse (bitX-(h/150*50),bitY-(h/150*35),h/150*10,h/150*10); //Eye
+    fill(255, 255, 255);
+    arc(bitX-(h/150*30),bitY-(h/150*5),h/150*40,h/150*25,0,180);
+    noFill();
+    arc(bitX-(h/150*30),bitY-(h/150*20),h/150*10,h/150*10,12,240);
+    fill(0, 0, 128);
+    quad(bitX-(h/150*85),bitY+(h/150*105),bitX-(h/150*63),bitY+(h/150*30),bitX+(h/150*4),bitY+(h/150*30),bitX+(h/150*24),bitY+(h/150*105));
+    strokeWeight(2);
+    fill(0, 0, 0);
+    textSize(h/150*30);
+    text("JL",bitX-(h/150*45),bitY+(h/150*65));
+    line(bitX-(h/150*70),bitY-(h/150*48),bitX-(h/150*83),bitY-(h/150*25));
+    line(bitX+(h/150*10),bitY-(h/150*48),bitX+(h/150*21),bitY-(h/150*25));
+    
+};
+
+var drawBitmojiHead = function(xPos,yPos,height) {
+    noStroke();
+    fill(176,108,73); //skin tone
+    ellipse(xPos-3*(height/120),yPos+1*(height/120),84*(height/120),100*(height/120)); //face
+    fill(0, 0, 0);
+    arc(xPos-3*(height/120), yPos-25*(height/120), 69*(height/120), -53*(height/120), 0, 180); //beanie hat
+    rect(xPos-43*(height/120), yPos-30*(height/120), 80*(height/120),13*(height/120));
+    fill(176,108,73);
+    ellipse(xPos-43*(height/120),yPos-5*(height/120),17*(height/120),22*(height/120));  //left ear
+    ellipse(xPos+37*(height/120),yPos-5*(height/120),17*(height/120),22*(height/120)); //right ear
+    fill(0, 0, 0);
+    ellipse(xPos-15*(height/120),yPos-1*(height/120),10*(height/120),11*(height/120));  //left eye
+    ellipse(xPos+11*(height/120),yPos-1*(height/120),10*(height/120),11*(height/120));  //lright eye
+    stroke(0, 0, 0);
+    strokeWeight(1);
+    fill(176,108,73);
+    bezier(xPos,yPos,xPos+height/120*21,yPos+22*height/120,xPos-8*height/120,yPos+20*height/120,xPos-4*height/120,yPos+11*height/120); //nose
+    fill(255, 255, 255);
+    arc(xPos+0*height/120,yPos+27*height/120, 25*height/120, 14*height/120, 1, 180); //mouth
+};  //function draws bitmoji head
+
+var drawBitmojiBody = function(xPos,yPos,height) {
+    stroke(0, 0, 0);
+    strokeWeight(5);
+    fill(0, 0, 0);
+    line(xPos-35*(height/120),yPos+38*(height/120),xPos-79*(height/120),yPos+70*(height/120));
+    line(xPos+30*(height/120),yPos+38*(height/120),xPos+80*(height/120),yPos+62*(height/120));
+    line(xPos+52*(height/120),yPos+87*(height/120),xPos+51*(height/120),yPos+166*(height/120));
+    line(xPos-47*(height/120),yPos+88*(height/120),xPos-47*(height/120),yPos+166*(height/120));
+    line(xPos-79*(height/120),yPos+70*(height/120),xPos-47*(height/120),yPos+92*(height/120));
+    line(xPos+82*(height/120),yPos+63*(height/120),xPos+53*(height/120),yPos+92*(height/120));
+    noStroke();//tshirt design
+    fill(255, 0, 0);
+    beginShape();
+    vertex(xPos+45*height/120,yPos+120*height/120);
+    bezierVertex(xPos+15*(height/120), yPos+209*(height/120), xPos-139*(height/120), yPos+59*(height/120), xPos+50*(height/120), yPos+144*(height/120));
+    bezierVertex(xPos-17*(height/120), yPos+179*(height/120), xPos-37*(height/120), yPos-15*(height/120), xPos-21*(height/120), yPos+179*(height/119));
+    endShape();
+    // text("PM", xPos+10*(height/120), yPos+101*(height/120));
+    textSize(10*height/150);
+};  //fucntion draws bitmoji Body
+var drawBitMoji2 = function(xPos,yPos,height) {
+  drawBitmojiHead(xPos,yPos,height);
+  drawBitmojiBody(xPos,yPos,height);
+};      //function that draws the whole bitmoji
+
+
+//Pasted in Khan Button class
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(150, 225, 230);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var scene1 = function(){
+    background(0, 255, 217);
+};
+
+var startButton = new Button({
+    x: 121,
+    y: 333,
+    label: "Start!",
+    onClick: function() {
+        currentScene = 1;
+        scene1();
+    }
+});
+
+var splash = function ()
+{
+    background(172, 129, 179);
+    textSize(24);
+    text ("Asteroids",145,21);
+    textSize(17);
+    text ("By: Josh Lawson & Phiwe Mhlope",72,55);
+    textSize(20);
+    text ("Instructions...",141,210);
+    
+    
+    //drawBitmoji(150,74,100);
+    
+    drawBitMoji2(263,110,57);
+    drawBitMoji(147,136,75);
+    startButton.draw();
+};
+
+
+
+
+
+mouseClicked = function() {
+    if (currentScene ===0)
+        {startButton.handleMouseClick();}
+    else // currentScene = 1
+    {
+    }
+};
+
+draw = function() {
+    if (currentScene === 0)
+        {splash();
+    }
+};
