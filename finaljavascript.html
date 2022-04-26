@@ -105,8 +105,12 @@ Button.prototype.handleMouseClick = function() {
     }
 };
 
+
+
+
+
 var scene1 = function(){
-    background(0, 255, 217);
+    background(255, 255, 255);
 };
 
 var startButton = new Button({
@@ -118,6 +122,33 @@ var startButton = new Button({
         scene1();
     }
 });
+
+var charOne = function(x, y) {//sets the x and y
+    this.x = x;
+    this.y = y;
+};
+
+charOne.prototype.draw = function(h) {
+    this.x = constrain(this.x, 0, height-50);
+    image(getImage("creatures/Hopper-Happy"),this.x,this.y,50,50);
+};
+
+charOne.prototype.left = function() {//left 3 pixels
+    this.x -= 3;
+};
+
+charOne.prototype.right = function() {//right 3 pixels
+    this.x += 3;
+};
+
+
+mouseClicked = function() {
+    if (currentScene ===0)
+        {startButton.handleMouseClick();}
+    else // currentScene = 1
+    {
+    }
+};
 
 var splash = function ()
 {
@@ -137,20 +168,29 @@ var splash = function ()
     startButton.draw();
 };
 
+var character = new charOne(175, 350);
 
-
-
-
-mouseClicked = function() {
-    if (currentScene ===0)
-        {startButton.handleMouseClick();}
-    else // currentScene = 1
-    {
+draw = function() {//constantly runs                    
+    
+    if(currentScene === 0){
+        splash();
+        } else{
+    background(255, 255, 255);
+    if (keyIsPressed && keyCode === LEFT) {//if spacebar is pressed, bitmoji moves up 
+        character.left(); 
+    } else if(keyIsPressed && keyCode === RIGHT){
+        character.right();
     }
+    character.draw();//draws bitmoji on screen
+    }
+    
 };
 
-draw = function() {
-    if (currentScene === 0)
-        {splash();
-    }
-};
+
+
+
+
+
+
+
+
