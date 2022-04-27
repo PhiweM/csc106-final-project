@@ -1,4 +1,7 @@
-var currentScene= 0; 
+var currentScene= 0;
+var startTimer = millis();
+var time = 0;
+var score = 0;
 
 var drawBitMoji = function(bitX,bitY,h){   
     fill(225, 172, 150); 
@@ -130,7 +133,7 @@ var charOne = function(x, y) {//sets the x and y
 
 charOne.prototype.draw = function(h) {
     this.x = constrain(this.x, 0, height-50);
-    image(getImage("creatures/Hopper-Happy"),this.x,this.y,50,50);
+    image(getImage("space/beetleship"),this.x,this.y,82,82);
 };
 
 charOne.prototype.left = function() {//left 3 pixels
@@ -168,29 +171,25 @@ var splash = function ()
     startButton.draw();
 };
 
-var character = new charOne(175, 350);
-
+var character = new charOne(175, 332);
+var time = 0;
 draw = function() {//constantly runs                    
     
     if(currentScene === 0){
         splash();
         } else{
-    background(255, 255, 255);
+    background(8, 5, 8);
     if (keyIsPressed && keyCode === LEFT) {//if spacebar is pressed, bitmoji moves up 
         character.left(); 
     } else if(keyIsPressed && keyCode === RIGHT){
         character.right();
     }
     character.draw();//draws bitmoji on screen
+    fill(255, 255, 255);
+    textSize(15);
+    text("Time : " + time,20,15);
+    time  = round((millis() - startTimer)/1000);
+    text("Score: " + score, 328,15);//work on
     }
     
 };
-
-
-
-
-
-
-
-
-
