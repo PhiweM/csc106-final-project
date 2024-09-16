@@ -1,9 +1,9 @@
-var numStars = 120;
-var score = 0;
-var direction = 0;
+var numStars = 2000;
+var life = 5; 
+var score = 0; 
+var direction = 1; 
 var currentScene = 0;
-var hits = 0;
-var xPos = 0;
+
 var Button = function(config) {
     this.x = config.x || 0;
     this.y = config.y || 0;
@@ -31,22 +31,22 @@ Button.prototype.handleMouseClick = function() {
         this.onClick();
     }
 };
-
 var startButton = new Button({
-    x: 124,
-    y: 240,
+    x: 244,
+    y: 340,
     label: "Play Game",
     onClick: function() {
         currentScene = 1;
+        score = millis();
         // scene1();
     }
-});
-
+}); //declares new button class
 mouseClicked = function() {
     if(currentScene === 0){
     startButton.handleMouseClick();
     }
-};
+};  //Determines what happens when there's click on screen
+
 //***** BITMOJI FUNCTIONS ******//
 var drawBitMoji = function(bitX,bitY,h){   
     fill(225, 172, 150); 
@@ -117,7 +117,6 @@ var drawBitMoji2 = function(xPos,yPos,height) {
   drawBitmojiHead(xPos,yPos,height);
   drawBitmojiBody(xPos,yPos,height);
 };      //function that draws the whole bitmoji
-
 var bitMoji = function(x, y) {//sets the x and y
     this.x = x;
     this.y = y;
@@ -128,90 +127,24 @@ var bitMoji = function(x, y) {//sets the x and y
 //***** Splash Screen  ******//
 var splash = function ()
 {
-    background(179, 155, 131);
+    background(65, 56, 69);
     textSize(24);
+    fill(255, 238, 0);
     text ("Asteroids",145,21);
     textSize(17);
-    text ("By: Josh Lawson & Phiwe Mhlope",72,55);
+    fill(255, 255, 255);
+    text ("Josh Lawson & Phiwe Mhlope",72,55);
     textSize(20);
-    text ("Instructions...",141,210);
+    text ("INSTRUCTIONS...",114,210);
+    textSize(15);
+    text ("Using the left and right arrows,",95,247);
+    text ("Dodge the falling stars and stay alive🤗",72,262);
+    text ("You have 5 live, get hit by a star, you lose one",45,277);
+    text ("Game is over if you hit 0 lives, good luck!",72,292);
     drawBitMoji2(263,110,57);
     drawBitMoji(147,136,75);
     startButton.draw();
 };
-
-
-//***** Bitmoji Prototype Methods Start  ******//
-bitMoji.prototype.draw = function(h) {
-    this.y = constrain(this.y, 0, height-50);
-    fill(225, 172, 150); 
-    ellipse (this.x-(30/150*30),this.y-(30/150*20),30/150*100,30/150*100); //face
-    fill(0, 0, 0);
-    arc(this.x-(30/150*30),this.y-(30/150*50),30/150*90,30/150*75,180,360);//hat
-    fill(0,0,0);
-    rect(this.x-(30/150*10),this.y-(30/150*61),30/150*60,30/150*10);//hat
-    fill (31, 111, 191);
-    ellipse (this.x-(30/150*10),this.y-(30/150*35),30/150*10,30/150*10); //Eye
-    fill (31, 111, 191);
-    ellipse (this.x-(30/150*50),this.y-(30/150*35),30/150*10,30/150*10); //Eye
-    fill(255, 255, 255);
-    arc(this.x-(30/150*30),this.y-(30/150*5),30/150*40,30/150*25,0,180);
-    noFill();
-    arc(this.x-(30/150*30),this.y-(30/150*20),30/150*10,30/150*10,12,240);
-    
-    fill(0, 0, 128);
-    quad(this.x-(30/150*85),this.y+(30/150*105),this.x-(30/150*63),this.y+(30/150*30),this.x+(30/150*4),this.y+(30/150*30),this.x+(30/150*24),this.y+(30/150*105));
-    strokeWeight(2);
-    fill(0, 0, 0);
-    textSize(30/150*30);
-    text("JL",this.x-(30/150*45),this.y+(30/150*65));
-    line(this.x-(30/150*70),this.y-(30/150*48),this.x-(30/150*83),this.y-(30/150*25));
-    line(this.x+(30/150*10),this.y-(30/150*48),this.x+(30/150*21),this.y-(30/150*25));
-   
-    if(this.y < 100){//once bitmoji hits top the direction is set to 1
-        direction =1;
-    }
-    if(this.y > 275 && direction === 1){ //when it reaches the bottom and direction is 1 it adds 10 points
-        score+=10;
-        direction = 0;
-    }         
-    
-};//draws bitmoji
-
-bitMoji.prototype.left = function() {//makes nitmoji move up 3 pixels
-    this.x -= 2;
-};
-
-bitMoji.prototype.right = function() {//down 3 pixels
-    this.x += 2;
-};
-
-bitMoji.prototype.checkForCar = function(car) {//checks if the bitmoji is touching the stars
-    if ((car.x >= this.x && car.x <= (this.x + 40)) &&
-        (car.y >= this.y && car.y <= (this.y + 40))) {   
-        car.y = 400;
-        score -= 5;
-    }
-};
-//***** Bitmoji Prototype Methods End  ******//
-
-//***** Car function and Methods for falling obstacles  ******//
-var Car = function(x, y) {//sets x and y of stars
-    this.x = x;
-    this.y = y;
-}; //car x and y position objects
-Car.prototype.draw = function() {//draws stars
-    image(getImage("cute/Rock"),this.x,this.y,30,30);
-};
-var speed = [];
-var stars = [];//empty array 
-for (var i = 0; i < numStars; i++) {  
-    stars.push(new Car(random(0, 379),i * 70 - 8375));//pushes in stars until it reaches 119
-    speed.push(round(random(1, 2)));//pushes random speed in to car array
-
-}   //push stars and speeds into arrays
-speed[0] = 1;
-
 // var stillPlaying = true;
 
 //***** Character functions and methods *****//
@@ -221,75 +154,109 @@ var charOne = function(x, y) {//sets the x and y
 };
 charOne.prototype.draw = function(h) {
     this.x = constrain(this.x, 0, height-50);
-    image(getImage("creatures/Hopper-Happy"),this.x,this.y,50,50);
+    image(getImage("space/beetleship"),this.x,this.y,65,65);
 };
 charOne.prototype.left = function() {//left 3 pixels
-    this.x -= 3;
+    this.x -= 5;
 };
 charOne.prototype.right = function() {//right 3 pixels
-    this.x += 3;
+    this.x += 5;
 };
+charOne.prototype.checkForChar = function(char) {//checks if the bitmoji is touching thecars
+    if ((char.x >= this.x && char.x <= (this.x + 40)) &&
+        (char.y >= this.y && char.y <= (this.y + 40))) {   
+        char.y = 400;
+        life -= 1;
+    }
+};
+var character = new charOne(175, 339);
 
-var character = new charOne(175, 300);
+
+//***** Star functions and Methods for falling stars  ******//
+var Star = function(x, y) {//sets x and y of stars
+    this.x = x;
+    this.y = y;
+}; //Star x and y position objects
+Star.prototype.draw = function() {
+    image(getImage("cute/Star"),this.x,this.y,30,30);
+};//draws stars
+
+var speed = [];  //array for speeds of falling stars
+var stars = [];  //array for falling stars
+
+for (var i = 0; i < numStars; i++) {  
+    stars.push(new Star(random(0, 379),i * 70 - 140000));//pushes in stars into array
+    speed.push(1);
+}  //push stars and speeds into arrays
+speed[0] = 1;
+
 //***** Draw Fuction for the game screen ****** //
-draw = function() {//constantly runs                    
-    
+draw = function() {
+    var finalScore = round((millis()-score)/100);
+    for(var i = 0; i < speed.length; i++){//every 100 score, increase speed
+        if(finalScore % 100 === 0) {
+            speed[i]+=1;
+        }
+    }
+    if(life === 0){
+        currentScene = 2;
+    }
     if(currentScene === 0){
         splash(); //calls splash screen function
         }   //
         
-    else{
+    else if(currentScene === 1){
         background(227, 254, 255);
         fill(15, 13, 15);
-        rectMode(CORNER);
-        // rect(0, height*0.90, width, height*0.10);
         arc(204,-2,479,175,-3,181);
+        character.draw();//draws  character on screen
+        
+        drawBitMoji2(20,80,30);
+        drawBitMoji(25,160,40); //draw bitmojis on game screen 
+    
         if (keyIsPressed && keyCode === LEFT) { 
             character.left(); 
           } 
         else if(keyIsPressed && keyCode === RIGHT){
-        character.right();
+            character.right();
         }
-        character.draw();//draws bitmoji on screen
     
-    // if(this.y === 100){  
-    // score ++;
-    // }
-    var clouds = function() {
-       fill(255, 255, 255);
-       ellipse(77,204,77,70);
-       ellipse(120,235,108,81);
-       ellipse(176,222,71,54);
-       ellipse(123,261,60,57);
-       
-       ellipse(324,96,113,75);
-       ellipse(283,88,75,79);
-       ellipse(368,91,65,65);
-    };
-    clouds();
-    var skyStars = function() {
-        var x, y;
-        x = 10;
-        y = 10;
-      image(getImage("cute/Star"),10,10,25,25);
-      
-    //   for(var i = 0; i < 40; i++){
-    //       for (var j = 0; j < 30; j++){
-    //       image(getImage("cute/Star"),x*i + 10, y * j, 15,15 );
-    //       }
-    //   }
-    };
-    skyStars();
- 
- 
-    for (var i = 0; i < stars.length; i++) { 
-        stars[i].draw();
-        // moji.checkForCar(stars[i]);
-        stars[i].y += 1;
-        if(stars[69].x > 0){//once 50 stars pass, speed changes random 
-           stars[i].y += speed[i];
-        }
-        
-    } //draws stars and speed into arrays
-    }  //If currentScene === 1 draw this instead
+        fill(0, 0, 0);
+        textSize(15);
+        text("Score: " + finalScore,305,370);
+        text("Life: " + life, 305,352);
+        var clouds = function() {
+           fill(255, 255, 255);
+           ellipse(77,204,77,70);
+           ellipse(120,235,108,81);
+           ellipse(176,222,71,54);
+           ellipse(123,261,60,57);
+           
+           ellipse(324,96,113,75);
+           ellipse(283,88,75,79);
+           ellipse(368,91,65,65);
+        }; //draws clouds on game screen
+        clouds();
+     
+        for (var i = 0; i < stars.length; i++) { 
+            stars[i].draw();
+            character.checkForChar(stars[i]);
+            if(stars[10].y > 0){//once 11 stars pass, speed changes random 
+                 speed[i] +=1;
+            }
+            stars[i].y += speed[i];
+        } //draws stars and speed into arrays
+    }  
+    
+    else if (currentScene === 2){
+        background(255, 0, 0);
+        fill(0, 0, 0);
+        textSize(72);
+        text("GAME",87,154,180,130);
+        text("OVER",166,214,170,405);
+        fill(0, 0, 0);
+        textSize(30);
+        text("Click Resart To Go Again!",40,300,400,200);
+        fill(255, 255, 255);
+    }  //Game Over screen
 };
